@@ -1,48 +1,46 @@
 # Definition for singly-linked list.
-class ListNode(object):
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution(object):
 
-    def reverseList(self, head):
-        if head == None or head.next == None:
+    def reverse(self, head):
+        if not head or not head.next:
             return head
-        newHead = self.reverseList(head.next)
+        newHead = self.reverse(head.next)
         head.next.next = head
         head.next = None
         return newHead
+
+    def weaveLists(self, list1, list2, list1Turn):
+        if not list1 or list1==list2:
+            return list2
+        if not list2:
+            return list1
+
+        if list1Turn:
+            list1.next = self.weaveLists(list1.next, list2, False)
+            return list1
+        else:
+            list2.next = self.weaveLists(list1, list2.next, True)
+            return list2
+
+        
 
     def reorderList(self, head):
         """
         :type head: ListNode
         :rtype: None Do not return anything, modify head in-place instead.
         """
-        # do nothing if length < 3
-        if head == None or head.next == None or head.next.next == None:
-            return
-
-        # traverse until middle of the list
-        slow = fast = head
+        slow = fast = prev = head
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
 
-        # reverse right half
-        right = slow.next
-        right = self.reverseList(right)
-        slow.next = None  # `slow` is tail of left list
+        head2 = self.reverse(slow.next)
+        slow.next = None # slow is tail of left list
 
-        # get left half
-        left = head
-        while left and right:
-            tempL = left.next
-            tempR = right.next
+        return self.weaveLists(head, head2, True)
 
-            left.next = right
-            right.next = tempL
-
-            left = tempL
-            right = tempR
+        
