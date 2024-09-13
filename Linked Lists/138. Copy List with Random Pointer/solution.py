@@ -5,32 +5,36 @@ class Node:
         self.next = next
         self.random = random
 
-
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 class Solution(object):
 
     def __init__(self):
-        self.cache = {}
+        self.copyNodeOf = {}
 
-    def createCopy(self, head):
-        if head == None: return None
-        self.cache[head] = Node(head.val)
-        self.cache[head].next = self.createCopy(head.next)
-        return self.cache[head]
+
+    def copyList(self, head):
+        if not head: return None
+
+        # copy list (values & nexts)
+        newNode = Node(head.val)
+        newNode.next = self.copyList(head.next)
+
+        # cache copied nodes
+        self.copyNodeOf[head] = newNode
+        return newNode
+
 
     def copyRandomList(self, head):
         """
         :type head: Node
         :rtype: Node
         """
-        if head == None:
-            return None
-        copy = self.createCopy(head)
+        copy = self.copyList(head)
         while head:
             if head.random:
-                self.cache[head].random = self.cache[head.random]
+                self.copyNodeOf[head].random = self.copyNodeOf[head.random]
             head = head.next
         return copy
-
+    
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''
