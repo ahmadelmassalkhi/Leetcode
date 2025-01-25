@@ -10,9 +10,23 @@ class Solution(object):
         :type head: ListNode
         :rtype: bool
         """
-        slow = fast = head
+        if not head or not head.next: return False
+        slow = head
+        fast = head.next
         while fast and fast.next:
+            if slow == fast: return True
             slow = slow.next
             fast = fast.next.next
-            if slow == fast: return True
+        return False
+
+    def hasCycle_set(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        s = set()
+        while head:
+            if head in s: return True
+            s.add(head)
+            head = head.next
         return False

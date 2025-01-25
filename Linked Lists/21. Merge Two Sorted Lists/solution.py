@@ -1,10 +1,8 @@
 # Definition for singly-linked list.
-class ListNode(object):
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution(object):
     def mergeTwoLists(self, list1, list2):
         """
@@ -12,22 +10,18 @@ class Solution(object):
         :type list2: Optional[ListNode]
         :rtype: Optional[ListNode]
         """
-        head = tail = None
+        dummy = ListNode()
+        tail = dummy
+
         while list1 and list2:
-            minNode = list1 if list1.val < list2.val else list2
-            if head == None:
-                head = minNode
-            else:
-                tail.next = minNode
-            tail = minNode
-            if minNode == list1:
+            if list1.val < list2.val:
+                tail.next = list1
                 list1 = list1.next
             else:
+                tail.next = list2
                 list2 = list2.next
-        if list1 == None and list2 == None:
-            return head
-        nonNullList = list1 if list1 else list2
-        if tail == None:
-            return nonNullList
-        tail.next = nonNullList
-        return head
+            tail = tail.next
+
+        if list1: tail.next = list1
+        if list2: tail.next = list2
+        return dummy.next
